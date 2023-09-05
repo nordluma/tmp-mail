@@ -55,4 +55,39 @@ impl Client {
             .await
             .map(|_| ())
     }
+
+    /// Delete old mails
+    pub async fn delete_old_mail(&self) -> Result<()> {
+        let now = chrono::offset::Utc::now();
+        let a_week_ago = now - chrono::Duration::days(7);
+        let a_week_ago = &a_week_ago.format("%Y-%m-%d %H:%M:%S%.3f").to_string();
+
+        tracing::debug!("Deleting old mail from before {}", a_week_ago);
+
+        let count: i64 = i64::try_from(
+            self.db
+                .execute(Statement::with_args(
+                    "SELECT COUNT(*) FROM mail WHERE date < ?",
+                    libsql_client::args!(a_week_ago),
+                ))
+                .await?
+                .rows
+                .first()
+                .context("No rows returned from a COUNT(*) query")?
+                .values
+                .first()
+                .context("NO values returned from a COUNT(*) query")?,
+        )
+        .map_err(|e| anyhow::anyhow!(e))?;
+        tracing::debug!("Found {} old mail", count);
+
+        self.db
+            .execute(Statement::with_args(
+                "DELETE FROM mail WHERE date < ?",
+                libsql_client::args!(a_week_ago),
+            ))
+            .await
+            .ok();
+        Ok(())
+    }
 }
