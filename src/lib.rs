@@ -1,3 +1,4 @@
+pub mod database;
 pub mod smtp;
 
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
