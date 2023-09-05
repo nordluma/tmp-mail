@@ -18,17 +18,17 @@ pub enum State {
 ///
 /// Use `handle_smtp` to handle a single command.
 pub struct StateMachine {
-    state: State,
+    pub state: State,
     ehlo_greeting: String,
 }
 
 impl StateMachine {
-    const START: &[u8] = b"220 tmp-mail\n";
-    const OK: &[u8] = b"250 Ok\n";
-    const AUTH_OK: &[u8] = b"235 Ok\n";
-    const SEND_DATA: &[u8] = b"354 End data with <CR><LF>.<CR><LF>\n";
-    const END: &[u8] = b"221 Bye\n";
-    const WAIT: &[u8] = &[];
+    pub const START: &[u8] = b"220 tmp-mail\n";
+    pub const OK: &[u8] = b"250 Ok\n";
+    pub const AUTH_OK: &[u8] = b"235 Ok\n";
+    pub const SEND_DATA: &[u8] = b"354 End data with <CR><LF>.<CR><LF>\n";
+    pub const END: &[u8] = b"221 Bye\n";
+    pub const WAIT: &[u8] = &[];
 
     pub fn new(domain: impl AsRef<str>) -> Self {
         let domain = domain.as_ref();
