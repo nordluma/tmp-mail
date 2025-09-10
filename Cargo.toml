@@ -12,6 +12,6 @@ libsql-client = { version = "0.31.11", default-features = false, features = [
     "local_backend",
     "reqwest_backend",
 ] }
-tokio = { version = "1.32.0", features = ["full"] }
+tokio = { version = "1.38.2", features = ["full"] }
 tracing = "0.1.37"
-tracing-subscriber = "0.3.17"
+tracing-subscriber = "0.3.20"
